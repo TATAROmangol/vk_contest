@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"time"
 	. "vk_contest/internal/dijkstra"
 	. "vk_contest/internal/errors"
 	. "vk_contest/internal/structs"
@@ -31,8 +32,19 @@ func (a *Application) Run(){
 			return
 		}
 
+		startTime := time.Now()
 		res := GetPathByDijkstra(maze, start, end)
+		elapsedTime := time.Since(startTime)
+
 		a.out.WriteString(res)
+
+		if elapsedTime.Milliseconds() < 1 {
+			a.out.WriteString(fmt.Sprintf("%v микросекунд\n", elapsedTime.Microseconds()))
+		} else if elapsedTime.Seconds() < 1{
+			a.out.WriteString(fmt.Sprintf("%v милисекунд\n", elapsedTime.Milliseconds()))
+		} else {
+			a.out.WriteString(fmt.Sprintf("%v секунд\n", elapsedTime.Seconds()))
+		}
 
 		a.out.Flush()
 	}
@@ -41,7 +53,7 @@ func (a *Application) Run(){
 func readInput(in *bufio.Reader) ([][]*Point, *Point, *Point, error){
     var ySize, xSize int 
     n, err := fmt.Fscanln(in, &ySize, &xSize)
-	if err == io.EOF{
+	if err == io.EOF && n == 0{
 		return make([][]*Point, 0), &Point{}, &Point{}, io.EOF
 	}
     if n != 2 || err != nil || ySize < 1 || xSize < 1{

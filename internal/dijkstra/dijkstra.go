@@ -69,7 +69,7 @@ func GetPathByDijkstra(maze [][]*Point, start, end *Point) string{
     }
 
     for i := len(result) - 1; i >= 0; i-- {
-        builder.WriteString(fmt.Sprintf("(%d, %d)\n", result[i].Y, result[i].X))
+        builder.WriteString(fmt.Sprintf("%d %d\n", result[i].Y, result[i].X))
     }
 	builder.WriteString(".\n")
 	
